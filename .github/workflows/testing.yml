@@ -19,7 +19,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install -U pip
-          python -m pip install .[dev]
+          python -m pip install .[dev,google,tesseract]
       - name: Run tests
         run: |
           task test
