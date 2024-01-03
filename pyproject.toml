@@ -29,6 +29,7 @@ Repository = "https://github.com/ftnext/ocroy"
 version = { attr = "ocroy.__version__" }
 
 [project.optional-dependencies]
+google = ["google-cloud-vision"]
 dev = [
     "taskipy",
     "autoflake",
