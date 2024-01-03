@@ -30,6 +30,7 @@ version = { attr = "ocroy.__version__" }
 
 [project.optional-dependencies]
 google = ["google-cloud-vision"]
+tesseract = ["pytesseract"]
 dev = [
     "taskipy",
     "autoflake",
