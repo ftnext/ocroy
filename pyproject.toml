@@ -4,13 +4,14 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "ocroy"
-description = "optical character recognition (OCR) toolkit"
+description = "Switch optical character recognition (OCR) tools easily"
 readme = "README.md"
 requires-python = ">=3.8"
 license = { text = "MIT License" }
 authors = [{ name = "nikkie", email = "takuyafjp+develop@gmail.com" }]
 keywords = ["OCR"]
 classifiers = [
+    "Development Status :: 1 - Planning",
     "License :: OSI Approved :: MIT License",
     "Programming Language :: Python",
     "Programming Language :: Python :: 3",
