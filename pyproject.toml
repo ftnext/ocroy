@@ -29,10 +29,14 @@ Repository = "https://github.com/ftnext/ocroy"
 [tool.setuptools.dynamic]
 version = { attr = "ocroy.__version__" }
 
+[tool.setuptools.packages.find]
+include = ["ocroy*"]
+
 [project.optional-dependencies]
 google = ["google-cloud-vision"]
 tesseract = ["pytesseract"]
 dev = [
+    "pip-compile-multi",
     "taskipy",
     "autoflake",
     "pyupgrade",
