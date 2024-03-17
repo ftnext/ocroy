@@ -3,6 +3,18 @@ from io import BytesIO
 from ocroy.normalize import RemoveWhitespaceNormalizer
 
 
+class ImageRecognizer:
+    def recognize(self, content: bytes) -> str:
+        import pytesseract
+        from PIL import Image
+
+        image = Image.open(BytesIO(content))
+        result = pytesseract.image_to_string(image, lang="jpn")
+
+        normalizer = RemoveWhitespaceNormalizer()
+        return normalizer.normalize(result)
+
+
 def recognize(content: bytes) -> str:
     import pytesseract
     from PIL import Image
