@@ -1,3 +1,5 @@
+import argparse
+from pathlib import Path
 from unittest.mock import MagicMock, patch
 
 import pytest
@@ -9,6 +11,7 @@ from ocroy.recognizers.google_vision_api import (
     GoogleVisionApiRecognizer,
     ImageRecognizer,
     recognize,
+    recognize_command,
 )
 
 
@@ -72,8 +75,11 @@ class TestGoogleVisionApiRecognizer:
         ImageAnnotatorClient.assert_called_once_with()
 
 
-@patch("ocroy.recognizers.google_vision_api.OcrRecognizer")
-@patch("ocroy.recognizers.google_vision_api.GoogleVisionApiRecognizer")
+MODULE_UNDER_TEST = "ocroy.recognizers.google_vision_api"
+
+
+@patch(f"{MODULE_UNDER_TEST}.OcrRecognizer")
+@patch(f"{MODULE_UNDER_TEST}.GoogleVisionApiRecognizer")
 def test_recognize(
     GoogleVisionApiRecognizer: MagicMock, OcrRecognzier: MagicMock
 ) -> None:
@@ -90,3 +96,20 @@ def test_recognize(
     )
     OcrRecognzier.assert_called_once_with(google_recognizer)
     recognizer.assert_called_once_with(request)
+
+
+@pytest.mark.parametrize("handle_document", (True, False))
+@patch(f"{MODULE_UNDER_TEST}.recognize")
+def test_recognize_command(
+    recognize: MagicMock, handle_document: bool
+) -> None:
+    args = argparse.Namespace(
+        image_path=Path("path/to/image.png"), handle_document=handle_document
+    )
+
+    actual = recognize_command(args)
+
+    assert actual == recognize.return_value
+    recognize.assert_called_once_with(
+        OcrRequest(Path("path/to/image.png")), handle_document=handle_document
+    )

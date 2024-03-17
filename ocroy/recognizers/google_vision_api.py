@@ -58,6 +58,11 @@ def recognize(request: OcrRequest, *, handle_document: bool) -> str:
     return recognizer(request)
 
 
+def recognize_command(args: argparse.Namespace) -> str:
+    request = OcrRequest(args.image_path)
+    return recognize(request, handle_document=args.handle_document)
+
+
 if __name__ == "__main__":
     import argparse
     from pathlib import Path
@@ -67,6 +72,4 @@ if __name__ == "__main__":
     parser.add_argument("--handle-document", action="store_true")
     args = parser.parse_args()
 
-    request = OcrRequest(args.image_path)
-    text = recognize(request, handle_document=args.handle_document)
-    print(text)
+    print(recognize_command(args))
