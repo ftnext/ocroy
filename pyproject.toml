@@ -52,6 +52,7 @@ dev = [
     "types-protobuf",
     "types-requests",
     "types-Pillow",
+    "types-setuptools",
 ]
 
 [tool.taskipy.tasks]
