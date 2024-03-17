@@ -22,7 +22,7 @@ https://cloud.google.com/vision/docs/ocr#set-up-your-google-cloud-project-and-au
 Install this library and dependencies
 
 ```
-% pip install 'ocroy[google]@git+https://github.com/ftnext/ocroy.git'
+% pip install 'ocroy[google]'
 ```
 
 Then Run:
@@ -43,7 +43,7 @@ https://tesseract-ocr.github.io/tessdoc/Installation.html
 Install this library and dependencies
 
 ```
-% pip install 'ocroy[tesseract]@git+https://github.com/ftnext/ocroy.git'
+% pip install 'ocroy[tesseract]'
 ```
 
 Then Run:
