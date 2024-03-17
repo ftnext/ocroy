@@ -1,4 +1,3 @@
-from ocroy.parser import parse_args
+from ocroy import main
 
-args = parse_args()
-args.func(args)
+main()
