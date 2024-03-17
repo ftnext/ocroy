@@ -38,6 +38,16 @@ class DocumentRecognizer(ApiRecognizer):
         return annotations[0].description
 
 
+def GoogleVisionApiRecognizer(*, handle_document: bool) -> ApiRecognizer:
+    from google.cloud import vision
+
+    client = vision.ImageAnnotatorClient()
+    if handle_document:
+        return DocumentRecognizer(client)
+    else:
+        return ImageRecognizer(client)
+
+
 def recognize(content: bytes, *, as_document: bool) -> str:
     from google.cloud import vision
 

@@ -5,6 +5,7 @@ from google.cloud import vision
 
 from ocroy.recognizers.google_vision_api import (
     DocumentRecognizer,
+    GoogleVisionApiRecognizer,
     ImageRecognizer,
     recognize,
 )
@@ -47,6 +48,27 @@ class TestDocumentRecognizer:
         client.document_text_detection.assert_called_once_with(
             image=Image.return_value
         )
+
+
+@patch("google.cloud.vision.ImageAnnotatorClient")
+class TestGoogleVisionApiRecognizer:
+    def test_create_image_recognizer(
+        self, ImageAnnotatorClient: MagicMock
+    ) -> None:
+        actual = GoogleVisionApiRecognizer(handle_document=False)
+
+        assert isinstance(actual, ImageRecognizer)
+        assert actual.client == ImageAnnotatorClient.return_value
+        ImageAnnotatorClient.assert_called_once_with()
+
+    def test_create_document_recognizer(
+        self, ImageAnnotatorClient: MagicMock
+    ) -> None:
+        actual = GoogleVisionApiRecognizer(handle_document=True)
+
+        assert isinstance(actual, DocumentRecognizer)
+        assert actual.client == ImageAnnotatorClient.return_value
+        ImageAnnotatorClient.assert_called_once_with()
 
 
 @patch("google.cloud.vision.Image")
