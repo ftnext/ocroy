@@ -30,6 +30,14 @@ class ImageRecognizer(ApiRecognizer):
         return annotations[0].description
 
 
+class DocumentRecognizer(ApiRecognizer):
+    def _recognize(self, image: vision.Image) -> str:
+        response = self.client.document_text_detection(image=image)
+
+        annotations = response.text_annotations
+        return annotations[0].description
+
+
 def recognize(content: bytes, *, as_document: bool) -> str:
     from google.cloud import vision
 

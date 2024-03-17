@@ -1,14 +1,25 @@
 from unittest.mock import MagicMock, patch
 
+import pytest
 from google.cloud import vision
 
-from ocroy.recognizers.google_vision_api import ImageRecognizer, recognize
+from ocroy.recognizers.google_vision_api import (
+    DocumentRecognizer,
+    ImageRecognizer,
+    recognize,
+)
+
+
+@pytest.fixture
+def client() -> vision.ImageAnnotatorClient:
+    return MagicMock(spec=vision.ImageAnnotatorClient)
 
 
 class TestImageRecognizer:
     @patch("google.cloud.vision.Image")
-    def test_can_recognize(self, Image: MagicMock) -> None:
-        client = MagicMock(spec=vision.ImageAnnotatorClient)
+    def test_can_recognize(
+        self, Image: MagicMock, client: vision.ImageAnnotatorClient
+    ) -> None:
         response = client.text_detection.return_value
         sut = ImageRecognizer(client)
 
@@ -18,6 +29,24 @@ class TestImageRecognizer:
         assert actual == response.text_annotations[0].description
         Image.assert_called_once_with(content=image_content)
         client.text_detection.assert_called_once_with(image=Image.return_value)
+
+
+class TestDocumentRecognizer:
+    @patch("google.cloud.vision.Image")
+    def test_can_recognize(
+        self, Image: MagicMock, client: vision.ImageAnnotatorClient
+    ) -> None:
+        response = client.document_text_detection.return_value
+        sut = DocumentRecognizer(client)
+
+        image_content = MagicMock(spec=bytes)
+        actual = sut.recognize(image_content)
+
+        assert actual == response.text_annotations[0].description
+        Image.assert_called_once_with(content=image_content)
+        client.document_text_detection.assert_called_once_with(
+            image=Image.return_value
+        )
 
 
 @patch("google.cloud.vision.Image")
