@@ -16,14 +16,8 @@ class ImageRecognizer:
 
 
 def recognize(content: bytes) -> str:
-    import pytesseract
-    from PIL import Image
-
-    image = Image.open(BytesIO(content))
-    result = pytesseract.image_to_string(image, lang="jpn")
-
-    normalizer = RemoveWhitespaceNormalizer()
-    return normalizer.normalize(result)
+    recognizer = ImageRecognizer()
+    return recognizer.recognize(content)
 
 
 if __name__ == "__main__":
