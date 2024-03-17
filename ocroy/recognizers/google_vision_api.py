@@ -1,3 +1,35 @@
+from __future__ import annotations
+
+from abc import ABCMeta, abstractmethod
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from google.cloud import vision
+
+
+class ApiRecognizer(metaclass=ABCMeta):
+    def __init__(self, client: vision.ImageAnnotationContext) -> None:
+        self.client = client
+
+    def recognize(self, content: bytes) -> str:
+        from google.cloud import vision
+
+        image = vision.Image(content=content)
+        return self._recognize(image)
+
+    @abstractmethod
+    def _recognize(self, image: vision.Image) -> str:
+        raise NotImplementedError
+
+
+class ImageRecognizer(ApiRecognizer):
+    def _recognize(self, image: vision.Image) -> str:
+        response = self.client.text_detection(image=image)
+
+        annotations = response.text_annotations
+        return annotations[0].description
+
+
 def recognize(content: bytes, *, as_document: bool) -> str:
     from google.cloud import vision
 
