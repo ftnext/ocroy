@@ -26,6 +26,9 @@ dynamic = ["version"]
 [project.urls]
 Repository = "https://github.com/ftnext/ocroy"
 
+[project.scripts]
+ocroy = "ocroy:main"
+
 [tool.setuptools.dynamic]
 version = { attr = "ocroy.__version__" }
 
