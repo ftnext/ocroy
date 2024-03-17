@@ -1,4 +1,6 @@
+import argparse
 from io import BytesIO
+from pathlib import Path
 
 from ocroy.normalize import RemoveWhitespaceNormalizer
 from ocroy.recognizers.core import OcrRecognizer, OcrRequest
@@ -22,17 +24,13 @@ def recognize(request: OcrRequest) -> str:
     return recognizer(request)
 
 
+def recognize_command(args: argparse.Namespace) -> str:
+    return recognize(OcrRequest(args.image_path))
+
+
 if __name__ == "__main__":
-    import argparse
-    from pathlib import Path
-
-    from ocroy.reader import read_image
-
     parser = argparse.ArgumentParser()
     parser.add_argument("image_path", type=Path)
     args = parser.parse_args()
 
-    content = read_image(args.image_path)
-    text = recognize(content)
-
-    print(text)
+    print(recognize_command(args))

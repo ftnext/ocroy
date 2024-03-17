@@ -1,7 +1,13 @@
+import argparse
+from pathlib import Path
 from unittest.mock import MagicMock, patch
 
 from ocroy.recognizers.core import OcrRequest
-from ocroy.recognizers.tesseract import ImageRecognizer, recognize
+from ocroy.recognizers.tesseract import (
+    ImageRecognizer,
+    recognize,
+    recognize_command,
+)
 
 MODULE_UNDER_TEST = "ocroy.recognizers.tesseract"
 
@@ -50,3 +56,13 @@ def test_recognize(
     ImageRecognizer.assert_called_once_with()
     OcrRecognizer.assert_called_once_with(tesseract_recognizer)
     recognizer.assert_called_once_with(request)
+
+
+@patch(f"{MODULE_UNDER_TEST}.recognize")
+def test_recognize_command(recognize: MagicMock) -> None:
+    args = argparse.Namespace(image_path=Path("path/to/image.png"))
+
+    actual = recognize_command(args)
+
+    assert actual == recognize.return_value
+    recognize.assert_called_once_with(OcrRequest(Path("path/to/image.png")))
