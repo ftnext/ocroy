@@ -1,6 +1,7 @@
 from io import BytesIO
 
 from ocroy.normalize import RemoveWhitespaceNormalizer
+from ocroy.recognizers.core import OcrRecognizer, OcrRequest
 
 
 class ImageRecognizer:
@@ -15,9 +16,10 @@ class ImageRecognizer:
         return normalizer.normalize(result)
 
 
-def recognize(content: bytes) -> str:
-    recognizer = ImageRecognizer()
-    return recognizer.recognize(content)
+def recognize(request: OcrRequest) -> str:
+    tesseract_recognizer = ImageRecognizer()
+    recognizer = OcrRecognizer(tesseract_recognizer)
+    return recognizer(request)
 
 
 if __name__ == "__main__":

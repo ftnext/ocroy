@@ -1,5 +1,6 @@
 from unittest.mock import MagicMock, patch
 
+from ocroy.recognizers.core import OcrRequest
 from ocroy.recognizers.tesseract import ImageRecognizer, recognize
 
 MODULE_UNDER_TEST = "ocroy.recognizers.tesseract"
@@ -34,13 +35,18 @@ class TestImageRecognizer:
         )
 
 
+@patch(f"{MODULE_UNDER_TEST}.OcrRecognizer")
 @patch(f"{MODULE_UNDER_TEST}.ImageRecognizer")
-def test_recognize(ImageRecognizer: MagicMock):
-    recognizer = ImageRecognizer.return_value
+def test_recognize(
+    ImageRecognizer: MagicMock, OcrRecognizer: MagicMock
+) -> None:
+    tesseract_recognizer = ImageRecognizer.return_value
+    recognizer = OcrRecognizer.return_value
+    request = MagicMock(spec=OcrRequest)
 
-    image_content = MagicMock(spec=bytes)
-    actual = recognize(image_content)
+    actual = recognize(request)
 
-    assert actual == recognizer.recognize.return_value
+    assert actual == recognizer.return_value
     ImageRecognizer.assert_called_once_with()
-    recognizer.recognize.assert_called_once_with(image_content)
+    OcrRecognizer.assert_called_once_with(tesseract_recognizer)
+    recognizer.assert_called_once_with(request)
