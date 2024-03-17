@@ -3,6 +3,8 @@ from __future__ import annotations
 from abc import ABCMeta, abstractmethod
 from typing import TYPE_CHECKING
 
+from ocroy.recognizers.core import OcrRecognizer, OcrRequest
+
 if TYPE_CHECKING:
     from google.cloud import vision
 
@@ -48,23 +50,23 @@ def GoogleVisionApiRecognizer(*, handle_document: bool) -> ApiRecognizer:
         return ImageRecognizer(client)
 
 
-def recognize(content: bytes, *, handle_document: bool) -> str:
-    recognizer = GoogleVisionApiRecognizer(handle_document=handle_document)
-    return recognizer.recognize(content)
+def recognize(request: OcrRequest, *, handle_document: bool) -> str:
+    google_recognizer = GoogleVisionApiRecognizer(
+        handle_document=handle_document
+    )
+    recognizer = OcrRecognizer(google_recognizer)
+    return recognizer(request)
 
 
 if __name__ == "__main__":
     import argparse
     from pathlib import Path
 
-    from ocroy.reader import read_image
-
     parser = argparse.ArgumentParser()
     parser.add_argument("image_path", type=Path)
-    parser.add_argument("--as-document", action="store_true")
+    parser.add_argument("--handle-document", action="store_true")
     args = parser.parse_args()
 
-    content = read_image(args.image_path)
-    text = recognize(content, as_document=args.as_document)
-
+    request = OcrRequest(args.image_path)
+    text = recognize(request, handle_document=args.handle_document)
     print(text)

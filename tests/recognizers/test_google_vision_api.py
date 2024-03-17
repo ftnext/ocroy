@@ -3,6 +3,7 @@ from unittest.mock import MagicMock, patch
 import pytest
 from google.cloud import vision
 
+from ocroy.recognizers.core import OcrRequest
 from ocroy.recognizers.google_vision_api import (
     DocumentRecognizer,
     GoogleVisionApiRecognizer,
@@ -71,16 +72,21 @@ class TestGoogleVisionApiRecognizer:
         ImageAnnotatorClient.assert_called_once_with()
 
 
+@patch("ocroy.recognizers.google_vision_api.OcrRecognizer")
 @patch("ocroy.recognizers.google_vision_api.GoogleVisionApiRecognizer")
-def test_recognize(GoogleVisionApiRecognizer: MagicMock):
-    recognizer = GoogleVisionApiRecognizer.return_value
-    image_content = MagicMock(spec=bytes)
+def test_recognize(
+    GoogleVisionApiRecognizer: MagicMock, OcrRecognzier: MagicMock
+) -> None:
+    google_recognizer = GoogleVisionApiRecognizer.return_value
+    recognizer = OcrRecognzier.return_value
+    request = MagicMock(spec=OcrRequest)
     handle_document = MagicMock(spec=bool)
 
-    actual = recognize(image_content, handle_document=handle_document)
+    actual = recognize(request, handle_document=handle_document)
 
-    assert actual == recognizer.recognize.return_value
+    assert actual == recognizer.return_value
     GoogleVisionApiRecognizer.assert_called_once_with(
         handle_document=handle_document
     )
-    recognizer.recognize.assert_called_once_with(image_content)
+    OcrRecognzier.assert_called_once_with(google_recognizer)
+    recognizer.assert_called_once_with(request)
