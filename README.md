@@ -28,6 +28,10 @@ Install this library and dependencies
 Then Run:
 
 ```
+% ocroy google_api path/to/image --handle-document
+% # OR
+% python -m ocroy google_api path/to/image --handle-document
+% # OR
 % python -m ocroy.recognizers.google_vision_api path/to/image --handle-document
 ```
 
@@ -45,5 +49,9 @@ Install this library and dependencies
 Then Run:
 
 ```
+% ocroy tesseract path/to/image
+% # OR
+% python -m ocroy tesseract path/to/image
+% # OR
 % python -m ocroy.recognizers.tesseract path/to/image
 ```
