@@ -48,17 +48,9 @@ def GoogleVisionApiRecognizer(*, handle_document: bool) -> ApiRecognizer:
         return ImageRecognizer(client)
 
 
-def recognize(content: bytes, *, as_document: bool) -> str:
-    from google.cloud import vision
-
-    image = vision.Image(content=content)
-    client = vision.ImageAnnotatorClient()
-    if as_document:
-        response = client.document_text_detection(image=image)
-    else:
-        response = client.text_detection(image=image)
-    annotations = response.text_annotations
-    return annotations[0].description
+def recognize(content: bytes, *, handle_document: bool) -> str:
+    recognizer = GoogleVisionApiRecognizer(handle_document=handle_document)
+    return recognizer.recognize(content)
 
 
 if __name__ == "__main__":

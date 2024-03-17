@@ -71,33 +71,16 @@ class TestGoogleVisionApiRecognizer:
         ImageAnnotatorClient.assert_called_once_with()
 
 
-@patch("google.cloud.vision.Image")
-@patch("google.cloud.vision.ImageAnnotatorClient")
-def test_recognize_as_document(ImageAnnotatorClient, Image):
+@patch("ocroy.recognizers.google_vision_api.GoogleVisionApiRecognizer")
+def test_recognize(GoogleVisionApiRecognizer: MagicMock):
+    recognizer = GoogleVisionApiRecognizer.return_value
     image_content = MagicMock(spec=bytes)
-    image = Image.return_value
-    client = ImageAnnotatorClient.return_value
-    response = client.document_text_detection.return_value
+    handle_document = MagicMock(spec=bool)
 
-    actual = recognize(image_content, as_document=True)
+    actual = recognize(image_content, handle_document=handle_document)
 
-    assert actual == response.text_annotations[0].description
-    Image.assert_called_once_with(content=image_content)
-    ImageAnnotatorClient.assert_called_once_with()
-    client.document_text_detection.assert_called_once_with(image=image)
-
-
-@patch("google.cloud.vision.Image")
-@patch("google.cloud.vision.ImageAnnotatorClient")
-def test_recognize_not_document(ImageAnnotatorClient, Image):
-    image_content = MagicMock(spec=bytes)
-    image = Image.return_value
-    client = ImageAnnotatorClient.return_value
-    response = client.text_detection.return_value
-
-    actual = recognize(image_content, as_document=False)
-
-    assert actual == response.text_annotations[0].description
-    Image.assert_called_once_with(content=image_content)
-    ImageAnnotatorClient.assert_called_once_with()
-    client.text_detection.assert_called_once_with(image=image)
+    assert actual == recognizer.recognize.return_value
+    GoogleVisionApiRecognizer.assert_called_once_with(
+        handle_document=handle_document
+    )
+    recognizer.recognize.assert_called_once_with(image_content)
