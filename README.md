@@ -28,7 +28,7 @@ Install this library and dependencies
 Then Run:
 
 ```
-% python -m ocroy.recognizers.google_vision_api path/to/image
+% python -m ocroy.recognizers.google_vision_api path/to/image --handle-document
 ```
 
 ### Tesseract
