@@ -19,7 +19,13 @@ It allows for easy switching of tools🍰
 Set up your Google Cloud project and authentication  
 https://cloud.google.com/vision/docs/ocr#set-up-your-google-cloud-project-and-authentication
 
-Install this library and dependencies
+**Recommended**
+
+```
+% uvx --with 'ocroy[google]' ocroy google_api path/to/image --handle-document
+```
+
+Or install this library and dependencies
 
 ```
 % pip install 'ocroy[google]'
