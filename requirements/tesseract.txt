@@ -8,9 +8,9 @@
 -r base.txt
 -e file:.
     # via -r requirements/base.in
-packaging==23.2
+packaging==24.2
     # via pytesseract
-pillow==10.2.0
+pillow==11.1.0
     # via pytesseract
-pytesseract==0.3.10
+pytesseract==0.3.13
     # via -r requirements/tesseract.in
