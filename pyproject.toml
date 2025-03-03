@@ -53,6 +53,8 @@ dev = [
     "types-protobuf",
     "types-requests",
     "types-Pillow",
+    "types-cachetools",
+    "types-pyOpenSSL",
     "types-setuptools",
 ]
 
